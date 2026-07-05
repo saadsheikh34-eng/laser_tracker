@@ -1,0 +1,113 @@
+#include <stdio.h>
+#include <string.h>
+
+#include "lwip/err.h"
+#include "lwip/tcp.h"
+#include "xil_printf.h"
+#include "xil_cache.h"
+
+/* ================= CONFIG ================= */
+#define WIDTH   1280
+#define HEIGHT  720
+#define BPP     4   // ✅ MUST be 4 (BGRA)
+#define FRAME_SIZE (WIDTH * HEIGHT * BPP)
+
+/* FRAME BUFFERS */
+#define FB1 0x10000000U
+#define FB2 0x12000000U
+#define FB3 0x14000000U
+
+static u32 fb_list[3] = {FB1, FB2, FB3};
+
+/* buffer control */
+static int write_index = 1;
+static u32 offset = 0;
+
+/* ================= RECEIVE ================= */
+err_t recv_callback(void *arg, struct tcp_pcb *tpcb,
+                    struct pbuf *p, err_t err)
+{
+    if (!p) {
+        tcp_close(tpcb);
+        tcp_recv(tpcb, NULL);
+        return ERR_OK;
+    }
+
+    tcp_recved(tpcb, p->tot_len);
+
+    u32 fb_addr = fb_list[write_index];
+    u8 *fb = (u8 *)fb_addr;
+
+    struct pbuf *q = p;
+
+    while (q)
+    {
+        u8 *payload = (u8 *)q->payload;
+
+        for (u32 i = 0; i < q->len; i++)
+        {
+            if (offset < FRAME_SIZE)
+                fb[offset++] = payload[i];
+
+            /* ✅ FRAME COMPLETE */
+            if (offset == FRAME_SIZE)
+            {
+                Xil_DCacheFlushRange(fb_addr, FRAME_SIZE);
+
+                xil_printf("Frame 720p ✅\r\n");
+
+                offset = 0;
+
+                /* next buffer */
+                write_index = (write_index + 1) % 3;
+
+                /* small sync delay */
+                for (volatile int d = 0; d < 2000000; d++);
+
+                pbuf_free(p);
+                return ERR_OK;
+            }
+        }
+
+        q = q->next;
+    }
+
+    pbuf_free(p);
+    return ERR_OK;
+}
+
+/* ================= ACCEPT ================= */
+err_t accept_callback(void *arg, struct tcp_pcb *newpcb, err_t err)
+{
+    tcp_recv(newpcb, recv_callback);
+
+    xil_printf("Client connected ✅\r\n");
+
+    return ERR_OK;
+}
+
+/* ================= START APPLICATION ================= */
+int start_application(void)
+{
+    struct tcp_pcb *pcb;
+
+    pcb = tcp_new_ip_type(IPADDR_TYPE_ANY);
+
+    if (!pcb) {
+        xil_printf("TCP PCB alloc failed ❌\r\n");
+        return -1;
+    }
+
+    if (tcp_bind(pcb, IP_ANY_TYPE, 6001) != ERR_OK) {
+        xil_printf("TCP bind failed ❌\r\n");
+        return -1;
+    }
+
+    pcb = tcp_listen(pcb);
+
+    tcp_accept(pcb, accept_callback);
+
+    xil_printf("TCP Server Ready ✅ (Port 6001)\r\n");
+
+    return 0;
+}

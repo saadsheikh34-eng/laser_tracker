@@ -1,0 +1,6 @@
+eclipse.preferences.version=1
+encoding//src/display_ctrl/display_ctrl.c=UTF-8
+encoding//src/display_demo.c=UTF-8
+encoding//src/echo.c=UTF-8
+encoding//src/main.c=UTF-8
+encoding//src/platform_zynqmp.c=UTF-8

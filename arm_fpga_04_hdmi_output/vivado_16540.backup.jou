@@ -1,0 +1,13 @@
+#-----------------------------------------------------------
+# Vivado v2021.2 (64-bit)
+# SW Build 3367213 on Tue Oct 19 02:48:09 MDT 2021
+# IP Build 3369179 on Thu Oct 21 08:25:16 MDT 2021
+# Start of session at: Sat May 30 18:16:57 2026
+# Process ID: 16540
+# Current directory: C:/Users/Saad/Desktop/ZYNQ_MINI_ New/ZYNQ_MINI_ New/03 Sample Projects/7010/ARM+FPGA??/arm_fpga_04_hdmi_output
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent24548 C:\Users\Saad\Desktop\ZYNQ_MINI_ New\ZYNQ_MINI_ New\03 Sample Projects\7010\ARM+FPGA??\arm_fpga_04_hdmi_output\arm_fpga_04_hdmi_output.xpr
+# Log file: C:/Users/Saad/Desktop/ZYNQ_MINI_ New/ZYNQ_MINI_ New/03 Sample Projects/7010/ARM+FPGA??/arm_fpga_04_hdmi_output/vivado.log
+# Journal file: C:/Users/Saad/Desktop/ZYNQ_MINI_ New/ZYNQ_MINI_ New/03 Sample Projects/7010/ARM+FPGA??/arm_fpga_04_hdmi_output\vivado.jou
+# Running On: DESKTOP-N4P9TIA, OS: Windows, CPU Frequency: 4008 MHz, CPU Physical cores: 6, Host memory: 16943 MB
+#-----------------------------------------------------------
+start_gui

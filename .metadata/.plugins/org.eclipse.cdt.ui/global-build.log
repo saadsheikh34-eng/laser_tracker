@@ -1,0 +1,17 @@
+14:29:23 **** Incremental Build of project pchdmi_hw ****
+buildplatform.bat 54235 pchdmi_hw no_domain_build 
+XSDB Server Channel: tcfchan#4
+14:29:29 **** Incremental Build of configuration Debug for project pchdmi ****
+make all 
+make --no-print-directory pre-build
+a9-linaro-pre-build-step
+' '
+make --no-print-directory main-build
+make[1]: Nothing to be done for 'main-build'.
+14:29:36 **** Incremental Build of configuration Debug for project pchdmi_system ****
+make all 
+Generating bif file for the system project
+generate_system_bif.bat 54235 C:/Users/Saad/Desktop/echo_Clone/new_echo-main/pchdmi_hw/export/pchdmi_hw/pchdmi_hw.xpfm standalone_domain C:/Users/Saad/Desktop/echo_Clone/new_echo-main/pchdmi_system/Debug/system.bif
+sdcard_gen --xpfm C:/Users/Saad/Desktop/echo_Clone/new_echo-main/pchdmi_hw/export/pchdmi_hw/pchdmi_hw.xpfm --sys_config pchdmi_hw --bif C:/Users/Saad/Desktop/echo_Clone/new_echo-main/pchdmi_system/Debug/system.bif --bitstream C:/Users/Saad/Desktop/echo_Clone/new_echo-main/pchdmi/_ide/bitstream/hdmieth3.bit --elf C:/Users/Saad/Desktop/echo_Clone/new_echo-main/pchdmi/Debug/pchdmi.elf,ps7_cortexa9_0
+creating BOOT.BIN using C:/Users/Saad/Desktop/echo_Clone/new_echo-main/pchdmi/_ide/bitstream/hdmieth3.bit
+Running D:/Vitis/2021.2/bin/bootgen  -image C:/Users/Saad/Desktop/echo_Clone/new_echo-main/pchdmi_system/Debug/sd_card_temp/boot.bif -w -o i BOOT.BIN

@@ -1,0 +1,121 @@
+#include <stdio.h>
+#include <string.h>
+#include "xparameters.h"
+#include "netif/xadapter.h"
+#include "platform.h"
+#include "platform_config.h"
+#include "xil_printf.h"
+#include "xil_cache.h"
+#include "xil_mmu.h"
+#include "xstatus.h"
+
+/* lwIP */
+#include "lwip/udp.h"
+#include "lwip/ip_addr.h"
+
+/* HDMI */
+#include "display_demo.h"
+
+/* UDP server function */
+int start_application(void);
+
+/* Network interface */
+static struct netif server_netif;
+struct netif *echo_netif;
+
+/* ================= FRAMEBUFFER REGION ================= */
+#define FB_BASE  0x10000000U
+/* 3 buffers x ~1.2 MB, spaced 2 MB apart -> 6 MB span. We mark a clean
+ * 8 MB (8 x 1 MB MMU sections) non-cacheable to cover all of it. */
+#define FB_SPAN  0x00800000U   /* 8 MB */
+#define SECTION  0x00100000U   /* 1 MB MMU section granularity */
+
+/* Mark the whole framebuffer region NON-CACHEABLE. CPU writes (the UDP
+ * memcpy) then go straight to DDR, so VDMA always sees fresh pixels
+ * and we never pay a per-frame cache flush. Must run BEFORE anything
+ * writes the buffers.
+ *
+ * Trade-off: writes to non-cached memory are a bit slower per byte than
+ * cached writes, but for write-once / DMA-read data this is the lower,
+ * more deterministic latency path -- and it removes the 1.2 MB flush
+ * that used to sit in the critical path every frame.
+ *
+ * NORM_NONCACHE is defined in xil_mmu.h. If your BSP lacks it, use the
+ * numeric attribute 0x14de2 for Zynq-7000 (cortexa9). */
+static void make_fb_noncacheable(void)
+{
+    UINTPTR addr;
+    for (addr = FB_BASE; addr < FB_BASE + FB_SPAN; addr += SECTION) {
+        Xil_SetTlbAttributes(addr, NORM_NONCACHE);
+    }
+    xil_printf("Framebuffers marked non-cacheable\r\n");
+}
+
+/* Zero the buffers once at startup (no flush needed -- region is
+ * non-cached now). */
+static void clear_ddr(void)
+{
+    memset((void *)FB_BASE, 0x00, FB_SPAN);
+    xil_printf("DDR cleared\r\n");
+}
+
+/* ================= MAIN ================= */
+int main(void)
+{
+    ip_addr_t ipaddr, netmask, gw;
+    unsigned char mac_ethernet_address[] =
+    { 0x00, 0x0A, 0x35, 0x00, 0x01, 0x02 };
+
+    echo_netif = &server_netif;
+
+    init_platform();
+
+    xil_printf("\r\n=== HDMI STREAM SYSTEM (UDP, low latency) ===\r\n");
+
+    /* Make framebuffers non-cacheable FIRST, before they're touched. */
+    make_fb_noncacheable();
+
+    /* HDMI INIT */
+    if (HDMI_Init() != XST_SUCCESS) {
+        xil_printf("HDMI INIT FAILED\r\n");
+        return -1;
+    }
+
+    /* Clear DDR */
+    clear_ddr();
+
+    /* lwIP INIT */
+    lwip_init();
+
+    /* Static IP */
+    IP4_ADDR(&ipaddr,  192, 168, 1, 10);
+    IP4_ADDR(&netmask, 255, 255, 255, 0);
+    IP4_ADDR(&gw,      192, 168, 1, 1);
+
+    if (!xemac_add(echo_netif, &ipaddr, &netmask, &gw,
+                   mac_ethernet_address, PLATFORM_EMAC_BASEADDR)) {
+        xil_printf("ERROR: Failed to add network interface\r\n");
+        return -1;
+    }
+    netif_set_default(echo_netif);
+
+    platform_enable_interrupts();
+    netif_set_up(echo_netif);
+
+    xil_printf("IP Address: 192.168.1.10\r\n");
+
+    if (start_application() != 0) {
+        xil_printf("UDP server start failed\r\n");
+        return -1;
+    }
+
+    /* MAIN LOOP: pump the lwIP receive path as fast as possible. The
+     * UDP callback does all the work; keeping this loop tight (no
+     * prints, no sleeps) minimizes packet servicing latency. */
+    while (1) {
+        xemacif_input(echo_netif);
+    }
+
+    cleanup_platform();
+    return 0;
+}

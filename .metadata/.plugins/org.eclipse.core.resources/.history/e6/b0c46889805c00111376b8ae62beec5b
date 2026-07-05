@@ -1,0 +1,84 @@
+#include <stdio.h>
+#include <string.h>
+
+#include "lwip/err.h"
+#include "lwip/tcp.h"
+#include "xil_printf.h"
+#include "xil_cache.h"
+
+/* ✅ 720p CONFIG */
+#define WIDTH   1280
+#define HEIGHT  720
+#define BPP     4   // BGRA
+#define FRAME_SIZE (WIDTH * HEIGHT * BPP)
+
+/* FRAME BUFFERS */
+#define FB1 0x10000000U
+#define FB2 0x12000000U
+#define FB3 0x14000000U
+
+static u32 fb_list[3] = {FB1, FB2, FB3};
+
+static int write_index = 1;   // start away from display
+static int display_index = 0;
+static u32 offset = 0;
+
+/* sync delay (tune if needed) */
+static void sync_delay()
+{
+    for (volatile int i = 0; i < 2000000; i++);
+}
+
+/* RECEIVE */
+err_t recv_callback(void *arg, struct tcp_pcb *tpcb,
+                    struct pbuf *p, err_t err)
+{
+    if (!p) {
+        tcp_close(tpcb);
+        return ERR_OK;
+    }
+
+    tcp_recved(tpcb, p->tot_len);
+
+    u32 fb_addr = fb_list[write_index];
+    u8 *fb = (u8 *)fb_addr;
+
+    struct pbuf *q = p;
+
+    while (q)
+    {
+        u8 *payload = (u8 *)q->payload;
+
+        for (u32 i = 0; i < q->len; i++)
+        {
+            if (offset < FRAME_SIZE)
+                fb[offset++] = payload[i];
+
+            if (offset == FRAME_SIZE)
+            {
+                Xil_DCacheFlushRange(fb_addr, FRAME_SIZE);
+
+                xil_printf("Frame 720p ✅\r\n");
+
+                offset = 0;
+
+                /* ✅ prevent overwrite */
+                write_index = (write_index + 1) % 3;
+
+                if (write_index == display_index)
+                    write_index = (write_index + 1) % 3;
+
+                /* ✅ sync pacing */
+                sync_delay();
+
+                pbuf_free(p);
+                return ERR_OK;
+            }
+        }
+
+        q = q->next;
+    }
+
+    pbuf_free(p);
+    return ERR_OK;
+}

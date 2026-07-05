@@ -1,0 +1,89 @@
+#include <stdio.h>
+#include "xil_types.h"
+#include "xparameters.h"
+#include "xil_cache.h"
+#include "xil_printf.h"
+#include "xstatus.h"
+
+#include "display_demo.h"
+#include "display_ctrl/display_ctrl.h"
+#include "display_ctrl/vga_modes.h"
+
+/* Hardware IDs */
+#define DYNCLK_BASEADDR     XPAR_AXI_DYNCLK_0_BASEADDR
+#define VGA_VDMA_ID         XPAR_AXIVDMA_0_DEVICE_ID
+#define DISP_VTC_ID         XPAR_VTC_0_DEVICE_ID
+
+/* Global objects */
+DisplayCtrl dispCtrl;
+XAxiVdma vdma;
+
+/* ✅ TRIPLE BUFFER (CIRCULAR) */
+#define FB1 0x10000000
+#define FB2 0x10200000
+#define FB3 0x10400000
+
+#define NUM_FRAMES 3
+u8 *pFrames[NUM_FRAMES];
+
+/* ================= HDMI INIT ================= */
+int HDMI_Init()
+{
+    int Status;
+    XAxiVdma_Config *vdmaConfig;
+
+    xil_printf("\n=== Initializing HDMI (Circular Buffer Mode) ===\r\n");
+
+    /* ✅ Assign frame buffers */
+    pFrames[0] = (u8 *)FB1;
+    pFrames[1] = (u8 *)FB2;
+    pFrames[2] = (u8 *)FB3;
+
+    /* ✅ Initialize VDMA */
+    vdmaConfig = XAxiVdma_LookupConfig(VGA_VDMA_ID);
+    if (!vdmaConfig) {
+        xil_printf("VDMA lookup failed ❌\r\n");
+        return XST_FAILURE;
+    }
+
+    Status = XAxiVdma_CfgInitialize(&vdma,
+                                   vdmaConfig,
+                                   vdmaConfig->BaseAddress);
+    if (Status != XST_SUCCESS) {
+        xil_printf("VDMA init failed ❌\r\n");
+        return XST_FAILURE;
+    }
+
+    /* ✅ Set Video Mode */
+    VideoMode VMODE = VMODE_640x480;
+
+    Status = DisplayInitialize(&dispCtrl,
+                               &vdma,
+                               DISP_VTC_ID,
+                               DYNCLK_BASEADDR,
+                               pFrames,
+                               640 * 4,
+                               VMODE);
+
+    if (Status != XST_SUCCESS) {
+        xil_printf("Display init failed ❌\r\n");
+        return XST_FAILURE;
+    }
+
+    /* ✅ CRITICAL: Enable circular buffering */
+    dispCtrl.vdmaConfig.EnableCircularBuf = 1;
+
+    /* ✅ Optional: ensure 3 frame stores are used */
+    dispCtrl.vdmaConfig.FrameDelay = 0;
+
+    /* ✅ Start display pipeline */
+    Status = DisplayStart(&dispCtrl);
+    if (Status != XST_SUCCESS) {
+        xil_printf("Display start failed ❌\r\n");
+        return XST_FAILURE;
+    }
+
+    xil_printf("HDMI READY ✅ (Circular Buffer Active)\r\n");
+
+    return XST_SUCCESS;
+}

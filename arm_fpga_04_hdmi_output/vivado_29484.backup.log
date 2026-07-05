@@ -1,0 +1,116 @@
+#-----------------------------------------------------------
+# Vivado v2021.2 (64-bit)
+# SW Build 3367213 on Tue Oct 19 02:48:09 MDT 2021
+# IP Build 3369179 on Thu Oct 21 08:25:16 MDT 2021
+# Start of session at: Sun May 31 01:30:47 2026
+# Process ID: 29484
+# Current directory: C:/Users/Saad/Desktop/echo_Clone/new_echo-main/arm_fpga_04_hdmi_output
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent13584 C:\Users\Saad\Desktop\echo_Clone\new_echo-main\arm_fpga_04_hdmi_output\arm_fpga_04_hdmi_output.xpr
+# Log file: C:/Users/Saad/Desktop/echo_Clone/new_echo-main/arm_fpga_04_hdmi_output/vivado.log
+# Journal file: C:/Users/Saad/Desktop/echo_Clone/new_echo-main/arm_fpga_04_hdmi_output\vivado.jou
+# Running On: DESKTOP-N4P9TIA, OS: Windows, CPU Frequency: 4008 MHz, CPU Physical cores: 6, Host memory: 16943 MB
+#-----------------------------------------------------------
+start_gui
+open_project C:/Users/Saad/Desktop/echo_Clone/new_echo-main/arm_fpga_04_hdmi_output/arm_fpga_04_hdmi_output.xpr
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:kcu105:part0:1.6 available at D:/Vivado/2021.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/kcu105/1.6/board.xml as part xcku040-ffva1156-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:kcu105:part0:1.7 available at D:/Vivado/2021.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/kcu105/1.7/board.xml as part xcku040-ffva1156-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:kcu116:part0:1.4 available at D:/Vivado/2021.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/kcu116/1.4/board.xml as part xcku5p-ffvb676-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:kcu116:part0:1.5 available at D:/Vivado/2021.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/kcu116/1.5/board.xml as part xcku5p-ffvb676-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190_es:part0:1.3 available at D:/Vivado/2021.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vck190/es/1.3/board.xml as part xcvc1902-vsva2197-2mp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu108:part0:1.6 available at D:/Vivado/2021.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vcu108/1.6/board.xml as part xcvu095-ffva2104-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu108:part0:1.7 available at D:/Vivado/2021.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vcu108/1.7/board.xml as part xcvu095-ffva2104-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu110:part0:1.4 available at D:/Vivado/2021.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vcu110/1.4/board.xml as part xcvu190-flgc2104-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu128:part0:1.0 available at D:/Vivado/2021.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vcu128/production/1.0/board.xml as part xcvu37p-fsvh2892-2l-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu129:part0:1.0 available at D:/Vivado/2021.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vcu129/production/1.0/board.xml as part xcvu29p-fsga2577-2l-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vmk180:part0:2.2 available at D:/Vivado/2021.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vmk180/production/2.2/board.xml as part xcvm1802-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vmk180_es:part0:1.3 available at D:/Vivado/2021.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vmk180/es/1.3/board.xml as part xcvm1802-vsva2197-2mp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk120_es:part0:1.2 available at D:/Vivado/2021.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk120/es/1.2/board.xml as part xcvp1202-vsva2785-2mp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu208_es:part0:1.0 available at D:/Vivado/2021.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu208/es/1.0/board.xml as part xczu48dr-fsvg1517-2-e-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu208_es:part0:1.1 available at D:/Vivado/2021.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu208/es/1.1/board.xml as part xczu48dr-fsvg1517-2-e-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu208_es:part0:1.2 available at D:/Vivado/2021.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu208/es/1.2/board.xml as part xczu48dr-fsvg1517-2-e-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu208ld:part0:2.0 available at D:/Vivado/2021.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu208ld/production/2.0/board.xml as part xczu58dr-fsvg1517-2-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu208ld_es:part0:1.0 available at D:/Vivado/2021.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu208ld/es/1.0/board.xml as part xczu58dr-fsvg1517-2-i-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu216_es:part0:1.0 available at D:/Vivado/2021.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu216/es/1.0/board.xml as part xczu49dr-ffvf1760-2-e-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu216_es:part0:1.1 available at D:/Vivado/2021.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu216/es/1.1/board.xml as part xczu49dr-ffvf1760-2-e-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu216_es:part0:1.2 available at D:/Vivado/2021.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu216/es/1.2/board.xml as part xczu49dr-ffvf1760-2-e-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu216ld:part0:2.0 available at D:/Vivado/2021.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu216ld/production/2.0/board.xml as part xczu59dr-ffvf1760-2-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu216ld_es:part0:1.0 available at D:/Vivado/2021.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu216ld/es/1.0/board.xml as part xczu59dr-ffvf1760-2-i-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu670:part0:1.0 available at D:/Vivado/2021.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu670/1.0/board.xml as part xczu67dr-fsve1156-2-i specified in board_part file is either invalid or not available
+INFO: [Project 1-313] Project file moved from 'C:/Users/Saad/Desktop/echo_Clone/arm_fpga_04_hdmi_output' since last save.
+Scanning sources...
+Finished scanning sources
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1700] Loaded user IP repository 'c:/Users/Saad/Desktop/echo_Clone/new_echo-main/arm_fpga_04_hdmi_output/repo'.
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'D:/Vivado/2021.2/data/ip'.
+open_project: Time (s): cpu = 00:00:24 ; elapsed = 00:00:16 . Memory (MB): peak = 1360.973 ; gain = 0.000
+open_bd_design {C:/Users/Saad/Desktop/echo_Clone/new_echo-main/arm_fpga_04_hdmi_output/arm_fpga_04_hdmi_output.srcs/sources_1/bd/design_1/design_1.bd}
+Reading block design file <C:/Users/Saad/Desktop/echo_Clone/new_echo-main/arm_fpga_04_hdmi_output/arm_fpga_04_hdmi_output.srcs/sources_1/bd/design_1/design_1.bd>...
+Adding component instance block -- xilinx.com:ip:processing_system7:5.5 - processing_system7_0
+WARNING: [BD 41-176] The physical port 'M_AXI_GP0_aximm_wr_socket' specified in the portmap, is not found on the block! 
+WARNING: [BD 41-176] The physical port 'M_AXI_GP0_aximm_rd_socket' specified in the portmap, is not found on the block! 
+WARNING: [BD 41-176] The physical port 'S_AXI_HP0_aximm_wr_socket' specified in the portmap, is not found on the block! 
+WARNING: [BD 41-176] The physical port 'S_AXI_HP0_aximm_rd_socket' specified in the portmap, is not found on the block! 
+Adding component instance block -- xilinx.com:ip:proc_sys_reset:5.0 - rst_ps7_0_142M
+Adding component instance block -- xilinx.com:ip:proc_sys_reset:5.0 - rst_ps7_0_100M
+Adding component instance block -- digilentinc.com:ip:axi_dynclk:1.0 - axi_dynclk_0
+Adding component instance block -- digilentinc.com:ip:rgb2dvi:1.2 - rgb2dvi_0
+Adding component instance block -- xilinx.com:ip:axi_gpio:2.0 - axi_gpio_0
+Adding component instance block -- xilinx.com:ip:smartconnect:1.0 - axi_smc
+Adding component instance block -- xilinx.com:ip:axi_vdma:6.3 - axi_vdma_0
+Adding component instance block -- xilinx.com:ip:axis_subset_converter:1.1 - axis_subset_converter_0
+Adding component instance block -- xilinx.com:ip:axi_interconnect:2.1 - ps7_0_axi_periph
+Adding component instance block -- xilinx.com:ip:axi_crossbar:2.1 - xbar
+Adding component instance block -- xilinx.com:ip:axi_protocol_converter:2.1 - auto_pc
+Adding component instance block -- xilinx.com:ip:v_axi4s_vid_out:4.0 - v_axi4s_vid_out_0
+Adding component instance block -- xilinx.com:ip:v_tc:6.2 - v_tc_0
+Adding component instance block -- xilinx.com:ip:xlconcat:2.1 - xlconcat_0
+Adding component instance block -- xilinx.com:ip:xlconstant:1.1 - xlconstant_0
+Adding component instance block -- xilinx.com:ip:xlconstant:1.1 - xlconstant_1
+Successfully read diagram <design_1> from block design file <C:/Users/Saad/Desktop/echo_Clone/new_echo-main/arm_fpga_04_hdmi_output/arm_fpga_04_hdmi_output.srcs/sources_1/bd/design_1/design_1.bd>
+open_bd_design: Time (s): cpu = 00:00:10 ; elapsed = 00:00:06 . Memory (MB): peak = 1360.973 ; gain = 0.000
+update_compile_order -fileset sources_1
+startgroup
+set_property -dict [list CONFIG.TDATA_REMAP {tdata[23:16],tdata[7:0],tdata[15:8]}] [get_bd_cells axis_subset_converter_0]
+endgroup
+WARNING: [IP_Flow 19-474] Invalid Parameter 'Component_Name'
+startgroup
+set_property -dict [list CONFIG.PCW_ENET0_GRP_MDIO_ENABLE {1} CONFIG.PCW_ENET0_GRP_MDIO_IO {MIO 52 .. 53} CONFIG.PCW_MIO_16_SLEW {fast} CONFIG.PCW_MIO_17_SLEW {fast} CONFIG.PCW_MIO_18_SLEW {fast} CONFIG.PCW_MIO_19_SLEW {fast} CONFIG.PCW_MIO_20_SLEW {fast} CONFIG.PCW_MIO_21_SLEW {fast} CONFIG.PCW_MIO_22_SLEW {fast} CONFIG.PCW_MIO_23_SLEW {fast} CONFIG.PCW_MIO_24_SLEW {fast} CONFIG.PCW_MIO_25_SLEW {fast} CONFIG.PCW_MIO_26_SLEW {fast} CONFIG.PCW_MIO_27_SLEW {fast}] [get_bd_cells processing_system7_0]
+WARNING: [BD 41-176] The physical port 'M_AXI_GP0_aximm_wr_socket' specified in the portmap, is not found on the block! 
+WARNING: [BD 41-176] The physical port 'M_AXI_GP0_aximm_rd_socket' specified in the portmap, is not found on the block! 
+WARNING: [BD 41-176] The physical port 'S_AXI_HP0_aximm_wr_socket' specified in the portmap, is not found on the block! 
+WARNING: [BD 41-176] The physical port 'S_AXI_HP0_aximm_rd_socket' specified in the portmap, is not found on the block! 
+endgroup
+validate_bd_design
+WARNING: [BD 41-176] The physical port 'M_AXI_GP0_aximm_wr_socket' specified in the portmap, is not found on the block! 
+WARNING: [BD 41-176] The physical port 'M_AXI_GP0_aximm_rd_socket' specified in the portmap, is not found on the block! 
+WARNING: [BD 41-176] The physical port 'S_AXI_HP0_aximm_wr_socket' specified in the portmap, is not found on the block! 
+WARNING: [BD 41-176] The physical port 'S_AXI_HP0_aximm_rd_socket' specified in the portmap, is not found on the block! 
+INFO: [xilinx.com:ip:smartconnect:1.0-1] design_1_axi_smc_0: SmartConnect design_1_axi_smc_0 is in High-performance Mode.
+CRITICAL WARNING: [BD 41-1343] Reset pin /v_tc_0/resetn (associated clock /v_tc_0/clk) is connected to reset source /rst_ps7_0_100M/peripheral_aresetn (synchronous to clock source /processing_system7_0/FCLK_CLK0).
+This may prevent design from meeting timing. Please add Processor System Reset module to create a reset that is synchronous to the associated clock source /axi_dynclk_0/PXL_CLK_O.
+WARNING: [BD 41-927] Following properties on pin /axi_dynclk_0/REF_CLK_I have been updated from connected ip, but BD cell '/axi_dynclk_0' does not accept parameter changes, so they may not be synchronized with cell properties:
+	PHASE = 0.000 
+Please resolve any mismatches by directly setting properties on BD cell </axi_dynclk_0> to completely resolve these warnings.
+WARNING: [BD 41-927] Following properties on pin /axi_dynclk_0/PXL_CLK_O have been updated from connected ip, but BD cell '/axi_dynclk_0' does not accept parameter changes, so they may not be synchronized with cell properties:
+	PHASE = 0.000 
+Please resolve any mismatches by directly setting properties on BD cell </axi_dynclk_0> to completely resolve these warnings.
+WARNING: [BD 41-927] Following properties on pin /axi_dynclk_0/PXL_CLK_5X_O have been updated from connected ip, but BD cell '/axi_dynclk_0' does not accept parameter changes, so they may not be synchronized with cell properties:
+	PHASE = 0.000 
+Please resolve any mismatches by directly setting properties on BD cell </axi_dynclk_0> to completely resolve these warnings.
+WARNING: [BD 41-927] Following properties on pin /axi_dynclk_0/s00_axi_aclk have been updated from connected ip, but BD cell '/axi_dynclk_0' does not accept parameter changes, so they may not be synchronized with cell properties:
+	PHASE = 0.000 
+Please resolve any mismatches by directly setting properties on BD cell </axi_dynclk_0> to completely resolve these warnings.
+WARNING: [BD 41-927] Following properties on pin /rgb2dvi_0/PixelClk have been updated from connected ip, but BD cell '/rgb2dvi_0' does not accept parameter changes, so they may not be synchronized with cell properties:
+	PHASE = 0.000 
+Please resolve any mismatches by directly setting properties on BD cell </rgb2dvi_0> to completely resolve these warnings.
+WARNING: [BD 41-927] Following properties on pin /rgb2dvi_0/SerialClk have been updated from connected ip, but BD cell '/rgb2dvi_0' does not accept parameter changes, so they may not be synchronized with cell properties:
+	PHASE = 0.000 
+Please resolve any mismatches by directly setting properties on BD cell </rgb2dvi_0> to completely resolve these warnings.
+validate_bd_design: Time (s): cpu = 00:00:11 ; elapsed = 00:00:10 . Memory (MB): peak = 1538.547 ; gain = 52.473
+generate_target all [get_files  C:/Users/Saad/Desktop/echo_Clone/new_echo-main/arm_fpga_04_hdmi_output/arm_fpga_04_hdmi_output.srcs/sources_1/bd/design_1/design_1.bd]
+INFO: [BD 41-1662] The design 'design_1.bd' is already validated. Therefore parameter propagation will not be re-run.
+Wrote  : <C:\Users\Saad\Desktop\echo_Clone\new_echo-main\arm_fpga_04_hdmi_output\arm_fpga_04_hdmi_output.srcs\sources_1\bd\design_1\design_1.bd> 
+VHDL Output written to : c:/Users/Saad/Desktop/echo_Clone/new_echo-main/arm_fpga_04_hdmi_output/arm_fpga_04_hdmi_output.gen/sources_1/bd/design_1/synth/design_1.v
+VHDL Output written to : c:/Users/Saad/Desktop/echo_Clone/new_echo-main/arm_fpga_04_hdmi_output/arm_fpga_04_hdmi_output.gen/sources_1/bd/design_1/sim/design_1.v
+VHDL Output written to : c:/Users/Saad/Desktop/echo_Clone/new_echo-main/arm_fpga_04_hdmi_output/arm_fpga_04_hdmi_output.gen/sources_1/bd/design_1/hdl/design_1_wrapper.v
+CRITICAL WARNING: [IP_Flow 19-1747] Failed to deliver file 'd:/Vivado/2021.2/data/ip/xilinx/processing_system7_v5_5/xit/xdc.xit': Caught unexpected error when evaluating file 'd:/Vivado/2021.2/data/ip/xilinx/processing_system7_v5_5/xit/xdc.xit'

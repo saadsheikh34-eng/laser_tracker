@@ -1,0 +1,159 @@
+#include <stdio.h>
+#include <string.h>
+#include "lwip/udp.h"
+#include "lwip/ip_addr.h"
+#include "xil_printf.h"
+#include "xil_cache.h"
+#include "display_demo.h"
+#include "display_ctrl/display_ctrl.h"
+
+/* ========================================================= */
+/* VIDEO CONFIG                                              */
+/* ========================================================= */
+#define WIDTH       640
+#define HEIGHT      480
+#define BPP         4
+#define FRAME_SIZE  (WIDTH * HEIGHT * BPP)
+
+/* ========================================================= */
+/* FRAME BUFFERS (triple buffer = tear-free, ~1 frame latency) */
+/* ========================================================= */
+#define FB1 0x10000000U
+#define FB2 0x10200000U
+#define FB3 0x10400000U
+static u32 fb_list[3] = {FB1, FB2, FB3};
+extern DisplayCtrl dispCtrl;
+
+/* ========================================================= */
+/* PROTOCOL                                                  */
+/* ----------------------------------------------------------
+ * Header (12 bytes): frame_id, chunk_id, total_chunks (u32 LE).
+ * CHUNK_DATA MUST match the Python sender's payload size exactly,
+ * because the FPGA now writes each chunk at a FIXED offset
+ * (chunk_id * CHUNK_DATA) instead of a running counter. That makes
+ * reception order-independent: out-of-order or duplicate UDP packets
+ * land in the right place, and a single lost packet no longer stalls
+ * the whole frame.
+ *
+ * 1460 keeps header+data (1472) within one standard 1500-MTU Ethernet
+ * frame -> no IP fragmentation. If your whole path (PC NIC, switch,
+ * Zynq GEM) supports JUMBO frames, raise this to 8948 on BOTH sides:
+ * ~842 packets/frame -> ~137 packets/frame, the single biggest
+ * interrupt-overhead win available here.
+ * ========================================================= */
+#define HEADER_SIZE 12
+#define CHUNK_DATA  1460
+#define MAX_CHUNKS  ((FRAME_SIZE + CHUNK_DATA - 1) / CHUNK_DATA)
+
+/* ========================================================= */
+/* RECEIVE STATE                                             */
+/* ========================================================= */
+static u32 current_frame_id = 0xFFFFFFFF;
+static u32 received_chunks   = 0;
+static u32 expected_chunks   = 0;
+static int write_index       = 2;
+
+/* Per-chunk arrival marks for the in-progress frame, so duplicates
+ * are not double-counted and completion is exact. */
+static u8 chunk_seen[MAX_CHUNKS];
+
+/* ========================================================= */
+/* UDP RECEIVE CALLBACK                                      */
+/* ========================================================= */
+void udp_recv_callback(void *arg,
+                       struct udp_pcb *pcb,
+                       struct pbuf *p,
+                       const ip_addr_t *addr,
+                       u16_t port)
+{
+    if (!p) return;
+
+    /* A pbuf can be chained; this simple path assumes the datagram is
+     * in one segment (true for <=MTU packets). p->len == p->tot_len
+     * confirms that. */
+    if (p->len < HEADER_SIZE || p->len != p->tot_len) {
+        pbuf_free(p);
+        return;
+    }
+
+    u8 *payload = (u8 *)p->payload;
+    u32 frame_id     = *((u32 *)(payload + 0));
+    u32 chunk_id     = *((u32 *)(payload + 4));
+    u32 total_chunks = *((u32 *)(payload + 8));
+    u8 *data     = payload + HEADER_SIZE;
+    u32 data_len = p->len - HEADER_SIZE;
+
+    /* sanity: ignore malformed chunk indices */
+    if (chunk_id >= MAX_CHUNKS || total_chunks > MAX_CHUNKS) {
+        pbuf_free(p);
+        return;
+    }
+
+    /* ---------------- NEW FRAME ---------------- */
+    if (frame_id != current_frame_id) {
+        current_frame_id = frame_id;
+        received_chunks  = 0;
+        expected_chunks  = total_chunks;
+        memset(chunk_seen, 0, total_chunks);
+    }
+
+    /* ---------------- WRITE AT FIXED OFFSET ---------------- */
+    u32 dst_off = chunk_id * CHUNK_DATA;
+    if (dst_off + data_len <= FRAME_SIZE) {
+        u8 *fb = (u8 *)fb_list[write_index];
+        memcpy(&fb[dst_off], data, data_len);
+
+        if (!chunk_seen[chunk_id]) {
+            chunk_seen[chunk_id] = 1;
+            received_chunks++;
+        }
+    }
+
+    /* ---------------- FRAME COMPLETE ---------------- */
+    if (expected_chunks != 0 && received_chunks == expected_chunks) {
+
+        /* No cache flush here: the framebuffer region is marked
+         * NON-CACHEABLE in main.c (Xil_SetTlbAttributes), so every
+         * memcpy above already landed in DDR. This deletes the old
+         * ~1.2 MB/frame flush cost entirely. */
+
+        /* Show the frame we just finished. Takes effect at the next
+         * VDMA frame boundary (vsync) -- the ~1 frame of unavoidable
+         * tear-free display latency. */
+        DisplayChangeFrame(&dispCtrl, write_index);
+
+        /* Write the NEXT frame into a buffer that is neither the one
+         * now being displayed nor the one VDMA may still be parked on
+         * this vsync -> +2 keeps it tear-free without adding latency. */
+        int display_index = dispCtrl.curFrame;
+        write_index = (display_index + 2) % 3;
+
+        /* force a fresh frame-id check on the next packet */
+        current_frame_id = 0xFFFFFFFF;
+        expected_chunks  = 0;
+    }
+
+    pbuf_free(p);
+}
+
+/* ========================================================= */
+/* START UDP SERVER                                          */
+/* ========================================================= */
+int start_application(void)
+{
+    struct udp_pcb *pcb = udp_new();
+    if (!pcb) {
+        xil_printf("UDP PCB create failed\r\n");
+        return -1;
+    }
+    if (udp_bind(pcb, IP_ANY_TYPE, 6001) != ERR_OK) {
+        xil_printf("UDP bind failed\r\n");
+        return -1;
+    }
+    udp_recv(pcb, udp_recv_callback, NULL);
+
+    xil_printf("UDP Video Server Ready @ Port 6001\r\n");
+    xil_printf("Resolution : %dx%d  Frame: %d bytes  Chunks/frame: %d\r\n",
+               WIDTH, HEIGHT, FRAME_SIZE, (int)MAX_CHUNKS);
+    return 0;
+}
